@@ -1,0 +1,44 @@
+VIRTUAL A3 1:
+Implement calibration for CSI camera images:
+Camera calibration for front csi
+CSI calibration RMS reprojection error: 1.7299799251253418
+CSI camera intrinsic matrix at resolution [820, 410] is:
+[[279.38651301   0.         412.87180887]
+ [  0.         281.67754908 241.82212823]
+ [  0.           0.           1.        ]]
+CSI camera distortion parameters at resolution [820, 410] are:
+[[-0.17492863  0.04361164  0.00463003  0.00386518 -0.00172864]]
+
+Implement calibration for realsense D435 camera images:
+Camera calibration for D435 RGB camera
+D435 calibration RMS reprojection error: 1.6930982253394657
+D435 RGB camera intrinsic matrix at resolution [640, 480] is:
+[[399.1413192    0.         337.98806507]
+ [  0.         403.33122525 192.93893844]
+ [  0.           0.           1.        ]]
+D435 RGB camera distortion parameters at resolution [640, 480] are:
+[[ 0.03481406 -0.68542676 -0.02396924  0.00176006  0.91559173]]
+
+
+
+VIRTUAL A3 2: -----------------------------------------------------------------------------------------------------------------------
+Implement calibration for CSI camera images:
+Camera calibration for front csi
+CSI calibration RMS reprojection error: 3.701452645762828
+CSI camera intrinsic matrix at resolution [820, 410] is:
+[[264.32954759,   0.0,         395.45757263],
+ [  0.0,         236.01661515, 161.52664939],
+ [  0.0,           0.0,           1.0,        ]]
+CSI camera distortion parameters at resolution [820, 410] are:
+[-0.39224848,  0.15605065, -0.04902927, -0.02187179, -0.03189701]
+
+
+Implement calibration for realsense D435 camera images:
+Camera calibration for D435 RGB camera
+D435 calibration RMS reprojection error: 1.7104966492265608
+D435 RGB camera intrinsic matrix at resolution [640, 480] is:
+[[437.48940389,   0.0,         310.90236092],
+ [  0.0,         443.73978374, 224.94618269],
+ [  0.0,           0.0,           1.0,        ]]
+D435 RGB camera distortion parameters at resolution [640, 480] are:
+[ 0.02263317, -0.24031339, -0.00103979, -0.00432427, 0.28558287]

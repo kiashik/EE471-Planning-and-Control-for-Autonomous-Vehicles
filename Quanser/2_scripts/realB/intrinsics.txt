@@ -1,0 +1,21 @@
+Camera calibration for front csi
+CSI calibration RMS reprojection error: 3.7005779414919258
+CSI camera intrinsic matrix at resolution [820, 410] is:
+[[707.31703579   0.         391.84000212]
+ [  0.         408.13345552 232.91585798]
+ [  0.           0.           1.        ]]
+CSI camera distortion parameters at resolution [820, 410] are: 
+[[ -2.59274561  14.25220831  -0.03946918   0.02746133 -26.34466779]]
+
+
+
+Camera calibration for D435 RGB camera
+D435 calibration RMS reprojection error: 0.3509044767277274
+D435 RGB camera intrinsic matrix at resolution [640, 480] is:
+[[588.69760828   0.         307.37846042]
+ [  0.         588.21401788 224.82625723]
+ [  0.           0.           1.        ]]
+D435 RGB camera distortion parameters at resolution [640, 480] are: 
+[[-6.32591819e-02  1.07689260e+00 -1.81770076e-02  2.49652934e-03
+  -3.53430092e+00]]
+

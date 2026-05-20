@@ -1,0 +1,19 @@
+numpy<2.4
+scipy
+pygit
+opencv-python
+pytransform3d
+matplotlib
+PyQt6
+pyqtgraph
+keyboard
+scikit-learn
+pandas
+pygame; python_version < "3.14"
+pygame-ce; python_version >= "3.14"
+scp
+paramiko
+colormath
+sounddevice
+vispy
+watchdog

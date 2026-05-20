@@ -1,0 +1,28 @@
+        # Basic IO - write motor commands
+        #TODO: Implement sinusoidal throttle and steering commands
+        M_throttle = 0.05
+        A_throttle = 0.25
+        throttle = M_throttle * np.sin(t * A_throttle * np.pi)
+
+        M_steering = 0.5 # rad
+        A_steering = 1
+        steering = M_steering * np.sin(t * A_steering * np.pi)
+
+        LEDs = np.array([0, 0, 0, 0, 0, 0, 1, 1])
+        #TODO: Implement the LED behavior
+        if steering < 0:    # turn right, LED 1, 3 ON
+            LEDs[1] = 1
+            LEDs[3] = 1
+        elif steering > 0:  # turn left, LED 0, 2 ON
+            LEDs[0] = 1
+            LEDs[2] = 1
+        else:   # going straight, so turn all turning lndicator LEDs off
+            LEDs[1] = 0
+            LEDs[3] = 0
+            LEDs[0] = 0
+            LEDs[2] = 0
+        
+        if throttle < 0:
+            LEDs[5] = 1
+        else:
+            LEDs[5] = 0
