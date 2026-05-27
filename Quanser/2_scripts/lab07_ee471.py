@@ -863,8 +863,29 @@ class StopSignFSM:
             float or None: requested v_ref (m/s), or None for no override.
         """
         # YOUR CODE HERE (Part D1)
-
-        return None
+        sign_visible = ( detection is not None and np.isfinite ( detection.get ( 'distance' , np.inf )))
+        if sign_visible :
+            self._t_sign_lastseen = current_t
+        if self.state == self.IDLE :
+            if sign_visible and detection ['distance'] < self.trigger_distance :
+                self.state = self.APPROACH
+                return self.approach_speed
+            return None
+        if self.state == self.APPROACH :
+            if v < 0.05: # stopped -> latch
+                self.state = self.STOP
+                self._t_stop_begin = current_t
+                return 0.0
+            return self.approach_speed
+        if self.state == self.STOP :
+            if current_t - self._t_stop_begin >= self.hold_duration :
+                self.state = self.COOLDOWN
+                return None
+            return 0.0
+        if self.state == self.COOLDOWN :
+            if current_t - self._t_sign_lastseen >= self.cooldown_duration :
+                self.state = self.IDLE
+                return None
 
 
 class TrafficLightFSM:
