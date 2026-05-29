@@ -919,7 +919,27 @@ class TrafficLightFSM:
         """
         # YOUR CODE HERE (Part D2)
 
-        return None
+        # if traffic light detected
+        light_visible = ( detection is not None and np.isfinite ( detection.get ( 'distance' , np.inf )))
+
+        if detection ['distance'] < self.trigger_distance:  # if within trigger distance
+            # update hysteresis
+            if detection ['color'] == 'green':  # if green then begin disengage
+                if self._clear_streak >= self._clear_required:  # if required streak met
+                    self._engaged = False   # disengage
+                else:   # if streak not met
+                    self._clear_streak += 1 # increase streak
+            else:   # if yellow or red light
+                self._clear_streak = 0  # reset streak
+        else:   # if outside trigger distance
+            self._engaged = False   # disengage
+            self._clear_streak = 0  # reset streak
+
+        # return velocity
+        if self._engaged is True:   #if engaged(red or yellow)
+            return 0.0      # stop
+        else:   # if disengaged(green)
+            return v_ref    # continue
 
 #endregion
 
