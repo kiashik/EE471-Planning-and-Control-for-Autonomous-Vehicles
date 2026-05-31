@@ -66,24 +66,24 @@ import pal.resources.images as images
 #         'perception_only' -> run camera + perception + display window only
 #                              (useful for Part A / B / C tuning, no driving)
 #         'drive'           -> full integration: plan + perception + driving
-mode = 'perception_only'
+mode = 'drive'
 
 # ===== Planner Parameters (Lab 6)
 # - startNode, goalNode: roadmap node indices for the planned route.
 # - plannerType: 'dijkstra' | 'astar' | 'astar_turn_penalty'.
 # - leftHandTraffic: must match Lab 3 / Lab 5 / Lab 6 (False for SDCS).
-startNode = 19
-goalNode = 23
+startNode = 0
+goalNode = 10
 plannerType = 'astar'
 turnPenalty = 0.0
 leftHandTraffic = False
 
 # ===== Driving Parameters (Lab 6 defaults)
-tf = 90
+tf = 50
 startDelay = 1
 controllerUpdateRate = 100
-v_ref = 0.3
-K_p = 0.1
+v_ref = 0.5
+K_p = 0.08
 K_i = 1.0
 K_stanley = 1.0
 goalStopDistance = 0.1
@@ -101,28 +101,28 @@ goalStopDistance = 0.1
 # record. The reference values that follow are tuned for the virtual
 # SDCS Cityscape; values for the physical car will differ.
 # VIRTUAL:
-# RED_LOWER_1 = (0, 90, 70)   # red, low-hue half
-# RED_UPPER_1 = (12, 255, 255)
-# RED_LOWER_2 = (150, 90, 70)   # red, high-hue half
-# RED_UPPER_2 = (180, 255, 255)
+RED_LOWER_1 = (0, 90, 70)   # red, low-hue half
+RED_UPPER_1 = (12, 255, 255)
+RED_LOWER_2 = (150, 90, 70)   # red, high-hue half
+RED_UPPER_2 = (180, 255, 255)
 
-# YELLOW_LOWER = (18, 55, 80)  # yellow (traffic-light body & yellow light)
-# YELLOW_UPPER = (40, 255, 255)
+YELLOW_LOWER = (18, 55, 80)  # yellow (traffic-light body & yellow light)
+YELLOW_UPPER = (40, 255, 255)
 
-# GREEN_LOWER = (40, 70, 60)   # green (traffic light "go" lamp)
-# GREEN_UPPER = (95, 255, 255)
+GREEN_LOWER = (40, 70, 60)   # green (traffic light "go" lamp)
+GREEN_UPPER = (95, 255, 255)
 
 # PHSYICAL:
-RED_LOWER_1 = (0, 81, 80) 
-RED_UPPER_1 = (8, 255, 255) 
-RED_LOWER_2 = (165, 136, 80) 
-RED_UPPER_2 = (180, 255, 255) 
+# RED_LOWER_1 = (0, 81, 80) 
+# RED_UPPER_1 = (8, 255, 255) 
+# RED_LOWER_2 = (165, 136, 80) 
+# RED_UPPER_2 = (180, 255, 255) 
 
-YELLOW_LOWER = (11, 162, 100) 
-YELLOW_UPPER =(32, 255, 255) 
+# YELLOW_LOWER = (11, 162, 100) 
+# YELLOW_UPPER =(32, 255, 255) 
 
-GREEN_LOWER = (47, 80, 80) 
-GREEN_UPPER = (64, 255, 255) 
+# GREEN_LOWER = (47, 80, 80) 
+# GREEN_UPPER = (64, 255, 255) 
 
  
 
@@ -145,11 +145,11 @@ SCALE = 1 if IS_PHYSICAL_QCAR else 10
 # - approachSpeed: speed (m/s) commanded while approaching a stop sign
 #       before the car is fully stopped. Set equal to v_ref to disable
 #       the approach phase.
-stopTriggerDistance   = 0.6*SCALE
+stopTriggerDistance   = 0.7*SCALE
 stopHoldDuration      = 3.0
 signCooldownDuration  = 2.0
-lightTriggerDistance  = 1.0*SCALE
-approachSpeed         = 0.3
+lightTriggerDistance  = 1.2*SCALE
+approachSpeed         = 0.075
 
 # Perception loop rate (Hz). 10-15 Hz is plenty for tabletop speeds.
 perceptionRate = 15.0
@@ -922,7 +922,7 @@ class TrafficLightFSM:
         # if traffic light detected
         light_visible = ( detection is not None and np.isfinite ( detection.get ( 'distance' , np.inf )))
 
-        if detection ['distance'] < self.trigger_distance:  # if within trigger distance
+        if light_visible and detection ['distance'] < self.trigger_distance:  # if within trigger distance
             # update hysteresis
             if detection ['color'] == 'green':  # if green then begin disengage
                 if self._clear_streak >= self._clear_required:  # if required streak met
@@ -931,6 +931,7 @@ class TrafficLightFSM:
                     self._clear_streak += 1 # increase streak
             else:   # if yellow or red light
                 self._clear_streak = 0  # reset streak
+                self._engaged = True
         else:   # if outside trigger distance
             self._engaged = False   # disengage
             self._clear_streak = 0  # reset streak
@@ -939,7 +940,7 @@ class TrafficLightFSM:
         if self._engaged is True:   #if engaged(red or yellow)
             return 0.0      # stop
         else:   # if disengaged(green)
-            return v_ref    # continue
+            return None    # continue
 
 #endregion
 
@@ -1207,6 +1208,21 @@ def controlLoop(perception_state):
             # the file runs before you implement this part.
             v_ref_effective = v_ref
             reason = 'nominal'
+
+            if stop_ovr is not None and stop_ovr < v_ref_effective:
+                # v_ref_effective = stop_ovr
+                reason = f'stop_sign{stopFSM.state}'
+
+            elif light_ovr is not None and light_ovr < v_ref_effective:
+                # v_ref_effective = light_ovr
+                reason = f'traffic_light{lightFSM._engaged}'
+            
+            if goalReached is True:
+                # v_ref_effective = 0.0
+                reason = 'goal reached'
+            
+            v_ref_effective = min(v_ref, stop_ovr, light_ovr, 0 if goalReached else None, key=lambda x: float('inf') if x is None else x)
+
 
             if reason != prev_reason:
                 print('  [t={:6.2f}] v_ref -> {:.2f} m/s  ({})'.format(

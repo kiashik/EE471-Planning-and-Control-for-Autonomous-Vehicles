@@ -48,23 +48,27 @@ from hal.products.mats import SDCSRoadMap
 SIGN_PLAN = [
     {
         'kind':   'stop_sign',
-        'node':    8,                 # anchor node on the SDCS map
+        # 'node':    8,                 # anchor node on the SDCS map
+        # 'offset': (0.15,  0.10),       # m, in roadmap coordinates
+        # 'yaw':     0.0,                # rad
+        'node':    4,                 # anchor node on the SDCS map
         'offset': (0.15,  0.10),       # m, in roadmap coordinates
-        # 'node':    15,                 # anchor node on the SDCS map
-        # 'offset': (0.0, 0.3),
         'yaw':     0.0,                # rad
     },
     {
         'kind':   'traffic_light',
-        'node':   15,
-        'offset': (-0.2, -0.2),
+        # 'node':   15,
+        # 'offset': (-0.2, -0.4),
+        # 'yaw':     np.pi/2,
+        'node':   8,
+        'offset': (0.3, 0.3),
         'yaw':     np.pi/2,
         # Initial lamp color: 'red' | 'yellow' | 'green'.
         'color':  'green',
         # If non-zero, automatically cycle the light through
         # red -> green -> red ... with this period in seconds.
         # Set to 0 to leave the lamp fixed at the initial color.
-        'cycle_period': 0,
+        'cycle_period': 20.0,
     },
 ]
 
