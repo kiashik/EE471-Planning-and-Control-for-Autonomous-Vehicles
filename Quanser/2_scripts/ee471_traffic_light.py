@@ -11,7 +11,9 @@ import time
 
 # Provide the Traffic Light IP address
 ## -- -- -TRAFFIC LIGHT IP- -- -- 
-light_ip = '192.168.2.80'
+# light_ip = '192.168.2.80'
+light_ip = '192.168.2.20'
+# light_ip = '192.168.2.83'
 # -- -- -- -- -- -- -- -- -- -- --
 
 # Change to be normal Traffic Pattern
@@ -19,10 +21,11 @@ light_ip = '192.168.2.80'
 # If TRAFFIC, red for 30s, green for 30s, and yellow for 3s
 # If QUICK, iterate through each light, 3 seconds each
 # Colors denote solid states
-pattern = 'Quick'
+pattern = 'Red'
+# pattern = 'Green'
 
 # Time to run (seconds)
-run_time = 300
+run_time = 3000
 
 # Initialize a Traffic Light with its corresponding IP
 light = TrafficLight(light_ip)

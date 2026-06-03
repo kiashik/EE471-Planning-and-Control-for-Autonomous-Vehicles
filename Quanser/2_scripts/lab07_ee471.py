@@ -82,10 +82,10 @@ leftHandTraffic = False
 tf = 50
 startDelay = 1
 controllerUpdateRate = 100
-v_ref = 0.5
+v_ref = 0.75
 K_p = 0.08
-K_i = 1.0
-K_stanley = 1.0
+K_i = 1.1
+K_stanley = 0.8
 goalStopDistance = 0.1
 
 #================ Part A1 - Perception Configuration ================
@@ -128,7 +128,7 @@ GREEN_UPPER = (95, 255, 255)
 
 # Minimum contour area (in pixels) for a detection to count. Filters out
 # noise blobs from background clutter.
-MIN_BLOB_AREA = 100
+MIN_BLOB_AREA = 200
 
 # Distance Scaling
 SCALE = 1 if IS_PHYSICAL_QCAR else 10
@@ -145,10 +145,10 @@ SCALE = 1 if IS_PHYSICAL_QCAR else 10
 # - approachSpeed: speed (m/s) commanded while approaching a stop sign
 #       before the car is fully stopped. Set equal to v_ref to disable
 #       the approach phase.
-stopTriggerDistance   = 0.7*SCALE
+stopTriggerDistance   = 0.8*SCALE
 stopHoldDuration      = 3.0
 signCooldownDuration  = 2.0
-lightTriggerDistance  = 1.2*SCALE
+lightTriggerDistance  = 1.4*SCALE
 approachSpeed         = 0.075
 
 # Perception loop rate (Hz). 10-15 Hz is plenty for tabletop speeds.
